@@ -91,14 +91,12 @@ app.get("/api/getscale/:schema", async (req: Request, res: Response) => {
             var ata = await helper.removeUnecessary(attackers, schema_pcount.ata);
             var tec = await helper.removeUnecessary(techs, schema_pcount.tec);
 
-            // for(var g = 0; g < gol.length; g++) finalPlayers.push(gol[g]);
-            // for(var l = 0; l < lat.length; l++) finalPlayers.push(lat[l]);
-            // for(var d = 0; d < def.length; d++) finalPlayers.push(def[d]);
-            // for(var m = 0; m < mid.length; m++) finalPlayers.push(mid[m]);
-            // for(var a = 0; a < ata.length; a++) finalPlayers.push(ata[a]);
-            // for(var t = 0; t < tec.length; t++) finalPlayers.push(tec[t]);
-
-            // return res.status(200).json(finalPlayers);
+            gol = (await formatter.format(gol));
+            lat = (await formatter.format(lat));
+            def = (await formatter.format(def));
+            mid = (await formatter.format(mid));
+            ata = (await formatter.format(ata));
+            tec = (await formatter.format(tec));
 
             return res.status(200).json({ gol, lat, def, mid, ata, tec });
         } else return res.status(200).json(formatedResponse);
