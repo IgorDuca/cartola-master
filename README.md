@@ -149,7 +149,7 @@ Run ```yarn dev``` to run the program localy and then go to http://localhost:123
       "club_id": 262,
       "position": 5,
       "cap": true,
-      "percentage": "99953180059.62906%"
+      "percentage": "12%"
    }
 }
 ```
