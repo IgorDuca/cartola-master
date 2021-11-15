@@ -1,3 +1,5 @@
+// This file has all the interface that are used on the program, the interfaces are how typescript recognize types on responses (promises or static).
+// All the interfaces are exported to be used in other files.
 export interface marketStatusInterface {
     rodada_atual: number,
     status_mercado: number,
@@ -154,5 +156,6 @@ export interface formattedPlayerInterface {
   name: string,
   club_id: number,
   club_name: string,
-  position: number
+  position: number,
+  capitain?: boolean
 }

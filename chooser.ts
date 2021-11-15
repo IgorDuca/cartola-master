@@ -1,5 +1,5 @@
 import axios from "axios";
-import { trendingPlayersInterface, allPlayersInterface } from "./interfaces";
+import { trendingPlayersInterface, allPlayersInterface, formattedPlayerInterface } from "./interfaces";
 
 class chooser {
 
@@ -60,6 +60,61 @@ class chooser {
         
         return players; // Return the best players generated list.
     }
+
+    public async chooseCaptain(players: Array<formattedPlayerInterface>) {
+        var major_rating = []; // The player with major rating will be here.
+
+        // Rating formula: points * price / all games
+
+        var all_players_request = (await axios.get<allPlayersInterface>("https://api.cartolafc.globo.com/atletas/mercado")).data;
+
+        var i = 0;
+        while(i < players.length) {
+            all_players_request.atletas.forEach(p => {
+                if(p.atleta_id === parseInt(players[i].id)) {
+                    if(p.posicao_id === 6) return;
+                    else {
+                        var rating = p.pontos_num * p.preco_num;
+                        rating = rating / p.jogos_num;
+                        rating = Math.round(rating);
+
+                        console.log(`Rating: ${rating}`);
+                        console.log(major_rating);
+
+                        // Checks if next player has a rating greater than the last, if it is true, the previous player'll be replaced by the new one.
+
+                        if(major_rating.length === 0) {
+                            major_rating.push({ id: p.atleta_id, player_rating: rating, allgames: p.jogos_num, points: p.pontos_num });
+                        } else if(rating > major_rating[0].player_rating) {
+                            major_rating = [];
+                            major_rating.push({ id: p.atleta_id, player_rating: rating, allgames: p.jogos_num, points: p.pontos_num });
+                        };
+                    }
+                };
+            });
+
+            i++;
+        };
+
+        for(var i = 0; i < all_players_request.atletas.length; i++) {
+            if(all_players_request.atletas[i].atleta_id === major_rating[0].id) {
+                var percentage = (Math.pow(major_rating[0].player_rating, major_rating[0].points) / major_rating[0].allgames); // Calculates the percentage using Pascal's Triangle
+                // Formula: The player rating, previously calculated, potencialized by the player points and then it divided by all the games that the player had played.
+
+                major_rating = [];
+                major_rating.push({
+                    id: all_players_request.atletas[i].atleta_id,
+                    name: all_players_request.atletas[i].nome,
+                    club_id: all_players_request.atletas[i].clube_id,
+                    position: all_players_request.atletas[i].posicao_id,
+                    cap: true,
+                    percentage: `${percentage}%`
+                }); // Returning the captain player object
+            };
+        };
+
+        return major_rating[0];
+    };
 }
 
 export default new chooser();

@@ -81,8 +81,6 @@ app.get("/api/getscale/:schema", async (req: Request, res: Response) => {
         console.log(`Got a total of ${formatedResponse.length}`);
 
         if(formatedResponse.length > schema_pcount.total) {
-            var finalPlayers = [];
-
             // Removing the unecessary players of each position
             var gol = await helper.removeUnecessary(goalkeepers, schema_pcount.gol);
             var lat = await helper.removeUnecessary(laterals, schema_pcount.lat);
@@ -98,7 +96,18 @@ app.get("/api/getscale/:schema", async (req: Request, res: Response) => {
             ata = (await formatter.format(ata));
             tec = (await formatter.format(tec));
 
-            return res.status(200).json({ gol, lat, def, mid, ata, tec });
+            var finalist = [];
+
+            gol.forEach(g => { finalist.push(g) });
+            lat.forEach(l => { finalist.push(l) });
+            def.forEach(d => { finalist.push(d) });
+            mid.forEach(m => { finalist.push(m) });
+            ata.forEach(a => { finalist.push(a) });
+            tec.forEach(g => { finalist.push(t) });
+
+            var cap = await chooser.chooseCaptain(finalist); // The recieved capitain player from the chooseCapitain() function -> See more on the file: choose.ts
+
+            return res.status(200).json({ gol, lat, def, mid, ata, tec, cap });
         } else return res.status(200).json(formatedResponse);
     } else return res.status(500).json({ success: false, message: "Market is closed" });
 });
