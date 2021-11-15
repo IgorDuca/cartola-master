@@ -64,7 +64,7 @@ app.get("/api/getscale/:schema", async (req: Request, res: Response) => {
         var attackers      =     await chooser.choose("5", schema_pcount.ata);
         var techs          =     await chooser.choose("6", schema_pcount.tec);
 
-        var allplayers = [];
+        var allplayers = []; // Array where will be stored all the fetched players
 
         // Adding each selected player to all player's array
         for(var g = 0; g < goalkeepers.length; g++) allplayers.push(goalkeepers[g]);
@@ -103,11 +103,15 @@ app.get("/api/getscale/:schema", async (req: Request, res: Response) => {
             def.forEach(d => { finalist.push(d) });
             mid.forEach(m => { finalist.push(m) });
             ata.forEach(a => { finalist.push(a) });
-            tec.forEach(g => { finalist.push(t) });
+            tec.forEach(t => { finalist.push(t) });
 
-            var cap = await chooser.chooseCaptain(finalist); // The recieved capitain player from the chooseCapitain() function -> See more on the file: choose.ts
+            var cap = await chooser.chooseCaptain(finalist); // The recieved capitain player from the chooseCapitain() function -> See more on the file: choose.ts.
 
-            return res.status(200).json({ gol, lat, def, mid, ata, tec, cap });
+            var allprice = Math.round(helper.getFinalPriceSum(allplayers)); // Gets the sum of all players price. Recieving a number from the file: helper.ts
+
+            console.log(`FINAL PRICE: ${allprice}`);
+
+            return res.status(200).json({ price: allprice, gol, lat, def, mid, ata, tec, cap });
         } else return res.status(200).json(formatedResponse);
     } else return res.status(500).json({ success: false, message: "Market is closed" });
 });

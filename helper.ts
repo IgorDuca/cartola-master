@@ -1,4 +1,5 @@
-import { formattedPlayerInterface } from "./interfaces";
+import { formattedPlayerInterface, allPlayersInterface, responsePlayerInterface } from "./interfaces";
+import axios from "axios";
 
 class helper {
     public async removeUnecessary(players: Array<formattedPlayerInterface>, count: number) {
@@ -16,7 +17,18 @@ class helper {
             
             return final_players;
         } else console.log(`Expected: ${count}, got ${count} -> Ignoring`)
-    }
+    };
+
+    public getFinalPriceSum(players: Array<responsePlayerInterface>) {
+
+        var price = 0; // Final price sum.
+
+        for(var i = 0; i < players.length; i++) {
+            price += players[i].preco_num;
+        };
+
+        return price; // Returns the final price
+    };
 }
 
 export default new helper();

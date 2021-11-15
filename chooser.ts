@@ -14,7 +14,7 @@ class chooser {
         console.log(`Finding ${count} players that play as ${position}`)
 
         // PLayers -> Array (Best players founded)
-        var players = [];
+        var players = []; // Array where will be stored all the fetched players.
 
         // Run the searching query giving priority to the trending players, but, if those players aren't enough, change the search target to all available players
         for(var a = 0; a < all_players_request.atletas.length; a++) {
