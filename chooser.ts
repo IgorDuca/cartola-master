@@ -98,8 +98,10 @@ class chooser {
 
         for(var i = 0; i < all_players_request.atletas.length; i++) {
             if(all_players_request.atletas[i].atleta_id === major_rating[0].id) {
-                var percentage = (Math.pow(major_rating[0].player_rating, major_rating[0].points) / major_rating[0].allgames); // Calculates the percentage using Pascal's Triangle
-                // Formula: The player rating, previously calculated, potencialized by the player points and then it divided by all the games that the player had played.
+                major_rating[0].points = Math.round(major_rating[0].points); //Rounding player points.
+                var percentage = Math.round(major_rating[0].player_rating * major_rating[0].points / major_rating[0].allgames);
+                // Calculates the probability to the player go and score a good amount of match points.
+                // Calculated using probability, multiplying the player rating by it points and then dividing by all the games played by the player.
 
                 major_rating = [];
                 major_rating.push({
