@@ -9,7 +9,7 @@
 
 ## About <a name = "about"></a>
 
-Algorithm to create CartolaFc team schemas based on most popular/rentable available players
+A.I algorithm that generates Cartola FC soccer schemas based on the most used and best rated players. Language: Typescript 
 
 ## Getting Started <a name = "getting_started"></a>
 
